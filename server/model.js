@@ -11,9 +11,9 @@ db.once('open', function () {
 
 const models = {
   user: {
-    'user': {'type': String, 'required': true},
-    'pwd': {'type': String, 'required': true},
-    'type': {'type': String, 'required': true},
+    'user': {'type': String, 'require': true},
+    'pwd': {'type': String, 'require': true},
+    'type': {'type': String, 'require': true},
     'avatar': {'type': String},
     // 个人简介或职位简介
     'desc:': {'type': String},
@@ -23,7 +23,6 @@ const models = {
     'money:': {'type': String},
   },
   chat: {
-
   }
 }
 
@@ -33,6 +32,7 @@ for (let m in models) {
 
 module.exports = {
   getModel: function (name) {
+    console.log(name);
     return mongoose.model(name);
   }
 }
