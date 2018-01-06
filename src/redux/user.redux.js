@@ -6,6 +6,7 @@ import { getRedirectPath } from '../util';
 const AUTH_SUCCESS = 'AUTH_SUCCESS';
 const ERROR_MSG = 'ERROR_MSG';
 const LOAD_DATA = 'LOAD_DATA';  
+const LOGOUT = 'LOGOUT';
 const initState = {
   redirectTo: '',
   msg: '',
@@ -22,10 +23,11 @@ export function user(state = initState, action) {
       return  {...state, ...action.payload }  
     case ERROR_MSG: 
       return {...state, isAuth: false, msg: action.msg}
+    case LOGOUT: 
+      return { ...initState, redirectTo: '/login'}
     default:
       return state;
   }
-  return state;
 }
 
 // function registerSuccess(data) {
@@ -46,6 +48,9 @@ export function loadData(userinfo) {
   console.log(userinfo);
   return { type: LOAD_DATA, payload: userinfo}
 }
+export function logoutSubmit() {
+  return { type: LOGOUT }
+}
 
 export function update(data) {
   return dispatch => {
@@ -61,6 +66,7 @@ export function update(data) {
 }
 
 export function login({user, pwd}) {
+  console.log(pwd);
   if (!user || !pwd) {
     return errMsg('用户名密码必须输入'); 
   }
@@ -83,6 +89,7 @@ export function register({user, pwd, repeatpwd, type}) {
   if (!user || !pwd || !repeatpwd) {
     return errMsg('用户名密码必须输入');
   }
+  console.log(typeof pwd);
   if (pwd !== repeatpwd) {
     return errMsg('两次密码输入不一致');
   }
@@ -101,3 +108,4 @@ export function register({user, pwd, repeatpwd, type}) {
       });
   }
 }
+

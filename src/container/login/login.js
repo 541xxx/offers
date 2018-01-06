@@ -4,45 +4,56 @@ import Logo from '../../components/logo/logo'
 import { List, InputItem, WingBlank, WhiteSpace, Button } from 'antd-mobile';
 import { connect } from 'react-redux';
 import { login } from '../../redux/user.redux';
+import imoocForm from '../../components/imooc-form/imooc-form';
+/* function Wrapper(Comp) {
+  class WrapperComp extends Comp{
+    componentDidMount() {
+      console.log('高阶组件新增的生命周期')
+    }
+    render() {
+      return <Comp></Comp>
+    }
+  }
+  return WrapperComp;
+}
+
+@Wrapper
+class Hello extends React.Component{
+  render() {
+    return <div>Hello</div>
+  }
+}
+ */
 
 @connect(
   state => state.user,
   {login}
 )
+@imoocForm
 class Login extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {
-      user: '',
-      pwd: ''
-    }
     this.register = this.register.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
   }
   register() {
-    console.log(this);
     this.props.history.push('./register')
   }
-  handleChange(key, val) {
-    this.setState({
-      [key]: val
-    })
-  }
   handleLogin() {
-    this.props.login(this.state); 
+    this.props.login(this.props.state); 
   }
   render() {
     return( 
     <div>
-        {this.props.redirectTo ? <Redirect to={this.props.redirectTo}></Redirect> : null}
+        {this.props.redirectTo && this.props.redirectTo!== '/login' ? <Redirect to={this.props.redirectTo}></Redirect> : null}
         <Logo></Logo>
         <WhiteSpace />
         <WingBlank>
           <List>
             {this.props.msg ? <p className='error-msg'>{this.props.msg}</p> : null}
-            <InputItem onChange={v => this.handleChange('user', v)}>用户名</InputItem>
+            <InputItem onChange={v => this.props.handleChange('user', v)}>用户名</InputItem>
             <WhiteSpace />
-            <InputItem type="password" onChange={v => this.handleChange('pwd', v)}>密码</InputItem>
+            <InputItem type="password" onChange={v => this.props.handleChange('pwd', v)}>密码</InputItem>
           </List>
           <WhiteSpace />
           <Button onClick={this.handleLogin} type="primary">登录</Button>

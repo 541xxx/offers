@@ -4,15 +4,11 @@ import { Switch, Route } from 'react-router-dom';
 import { NavBar } from 'antd-mobile';
 import  NavLinkNBar from '../navlink/navlink'; 
 import Boss from '../boss/boss'; 
+import Genius from '../genius/genius'; 
+import User from '../../components/user/user'; 
 
-function Genius() {
-  return <h2>Genius index</h2>
-}
 function Msg() {
   return <h2>Msg index  </h2>
-}
-function User() {
-  return <h2>User index  </h2>
 }
 
 @connect(
@@ -60,7 +56,7 @@ class Dashboard extends React.Component{
     return (
       <div>
         <NavBar className="fixed-header" mode='dard'>{navList.find(v => v.path===pathname).title}</NavBar>
-        <div style={{marginTop: 45}}>
+        <div>
           <Switch>
             {navList.map(v =>(
               <Route key={v.path} path={v.path} component={v.component}></Route>
