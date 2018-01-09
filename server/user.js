@@ -5,6 +5,7 @@ const Router = express.Router();
 const utils = require('utility');
 const model = require('./model');
 const User = model.getModel('user');
+const Chat = model.getModel('chat');
 const _filter = {'pwd': 0, '__v': 0};
 
 Router.get('/list', (req, res) => {
@@ -14,6 +15,16 @@ Router.get('/list', (req, res) => {
     return res.json({code: 0, data: doc});
   }); 
 });
+
+Router.get('/getmsgList', (req, res) => {
+  const user = req.cookies.user;
+  // {'$or': [{from: user, to: user}]},
+  Chat.find({}, (err, doc) => {
+    if (!err) {
+      return res.json({code: 0, msgs: doc})
+    }
+  })
+})
 
 Router.post('/update', (req, res) => {
    const userid = req.cookies.userid;
@@ -48,7 +59,6 @@ Router.post('/login', (req, res) => {
   })
 });
 Router.post('/register', (req, res) => {
-  console.log(res.body);
   const {user, pwd, type} = req.body;
   User.findOne({user}, (err, doc) => {
     if (doc) {
@@ -81,7 +91,7 @@ Router.get('/info', (req, res) => {
       return res.json({code: 1, msg: '服务端错误'});
     }
     return res.json({code: 0, data: doc});  
-  })
-})
+  });
+});
 
 module.exports = Router;
