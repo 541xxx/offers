@@ -17,14 +17,21 @@ Router.get('/list', (req, res) => {
 });
 
 Router.get('/getmsgList', (req, res) => {
-  const user = req.cookies.user;
+  const user = req.cookies.userid;
   // {'$or': [{from: user, to: user}]},
-  Chat.find({}, (err, doc) => {
-    if (!err) {
-      return res.json({code: 0, msgs: doc})
-    }
-  })
-})
+  User.find({}, (e, userdoc) => {
+    let users = {};
+    userdoc.forEach(v => {
+      users[v._id] = {name: v.user, avatar: v.avatar}
+    });
+    Chat.find({'$or': [{from: user}, {to: user}]}, (err, doc) => {
+      if (!err) {
+        console.log(doc);
+        return res.json({code: 0, msgs: doc, users: users})
+      }
+    });
+  });
+});
 
 Router.post('/update', (req, res) => {
    const userid = req.cookies.userid;

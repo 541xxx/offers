@@ -2,7 +2,13 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { TabBar } from 'antd-mobile';
+import { connect } from 'react-redux';
+import { getMsgList, recvMsg } from '../../redux/chat.redux';
 
+@connect(
+  state => state,
+  { getMsgList, recvMsg }
+)
 @withRouter
 class NavLinkBar extends React.Component{
   static propTypes = {
@@ -10,7 +16,7 @@ class NavLinkBar extends React.Component{
   }
   render() {
     const navList = this.props.data.filter(v => !v.hide);
-    console.log(this.props.location); 
+    console.log(this.props.chat.unread); 
     const { pathname } = this.props.location;
     console.log(navList);
     return (
@@ -18,6 +24,7 @@ class NavLinkBar extends React.Component{
         {
           navList.map(v => (
             <TabBar.Item
+              badge={ v.path==='/msg'?this.props.chat.unread:0}
               key={v.path}
               title={v.title}
               icon={{uri: require(`./img/${v.icon}.png`)}}
